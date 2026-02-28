@@ -81,6 +81,8 @@ public class RobotContainer {
     driverController.a()
         .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
 
+    driverController.y().whileTrue(driveSubsystem.alignWithTag());
+
     // Set the default command for the drive subsystem to the command provided by
     // factory with the values provided by the joystick axes on the driver
     // controller. The Y axis of the controller is inverted so that pushing the

@@ -18,6 +18,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 // import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
+import org.photonvision.PhotonCamera;
+import edu.wpi.first.math.controller.PIDController;
+
 public class CANDriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX leftLeader;
   private final WPI_VictorSPX leftFollower;
@@ -25,6 +28,10 @@ public class CANDriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX rightFollower;
 
   private final DifferentialDrive drive;
+
+  private final PhotonCamera camera = new PhotonCamera("photonvision"); // Must match your camera name in the dashboard
+  private final PIDController turnPID = new PIDController(0.05, 0, 0.005); // Tune these constants
+
 
   public CANDriveSubsystem() {
     // create brushed motors for drive
@@ -70,4 +77,24 @@ public class CANDriveSubsystem extends SubsystemBase {
     return this.run(
         () -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
   }
+
+  public Command alignWithTag() {
+        var result = camera.getLatestResult();
+
+        if (result.hasTargets()) {
+            double yaw = result.getBestTarget().getYaw();
+            
+            // Calculate rotation speed. Goal is 0 degrees yaw (centered).
+            // Negative yaw means tag is left, so we need to rotate left (negative rotation).
+            double rotationSpeed = turnPID.calculate(yaw, 0);
+
+            // Apply to tank drive (forward/backward speed = 0, only rotation)
+            return this.run(
+                () -> drive.arcadeDrive(0, rotationSpeed));
+        } else {
+            // No target found; stop or search
+            return this.run(
+                () -> drive.stopMotor());
+        }
+    }
 }
