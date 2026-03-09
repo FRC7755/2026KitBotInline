@@ -45,6 +45,8 @@ public final class Constants {
     public static final double LAUNCHING_LAUNCHER_VOLTAGE = 10.6;
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = .5;
+
+    public static final double SPIN_RPMS = 3000;
   }
 
   public static final class OperatorConstants {
@@ -52,6 +54,8 @@ public final class Constants {
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
+    public static final int BOX_CONTROLLER_PORT = 2;
+    
 
     // This value is multiplied by the joystick value when driving the robot to
     // help avoid driving and turning too fast and being difficult to control
