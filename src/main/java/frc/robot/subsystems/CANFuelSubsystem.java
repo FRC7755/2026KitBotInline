@@ -111,6 +111,7 @@ public class CANFuelSubsystem extends SubsystemBase {
     } else {
       SmartDashboard.putBoolean("RPM Achieved", false);
     }
+    currentRPM = Math.round(currentRPM *1.0)/1.0;
     SmartDashboard.putNumber("Current RPM", currentRPM);
     SmartDashboard.putNumber("Motor P", intakeLauncherRoller.configAccessor.closedLoop.getP());
     SmartDashboard.putNumber("Motor I", intakeLauncherRoller.configAccessor.closedLoop.getI());
