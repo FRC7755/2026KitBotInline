@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -25,6 +27,11 @@ public final class Constants {
     // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
     // likelihood of tripping breakers or damaging CIM motors
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
+
+    // Define physical constants (use meters and radians)
+    public static final double CAMERA_HEIGHT_METERS = 0.2; // Height of lens from floor
+    public static final double TARGET_HEIGHT_METERS = 1.124; // Height of AprilTag center from floor
+    public static final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(22.5); // Mounting angle
   }
 
   public static final class FuelConstants {
@@ -47,6 +54,7 @@ public final class Constants {
     public static final double SPIN_UP_SECONDS = .5;
 
     public static final double SPIN_RPMS = 3000;
+    public static final double RPM_TOLERANCE = 50;
   }
 
   public static final class OperatorConstants {
@@ -61,5 +69,11 @@ public final class Constants {
     // help avoid driving and turning too fast and being difficult to control
     public static final double DRIVE_SCALING = 1;
     public static final double ROTATION_SCALING = 1;
+  }
+
+  public static final class ClimberConstants {
+    public static final int CLIMBER_MOTOR_ID = 7;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 60;
+    public static final double CLIMBER_VOLTAGE = 8;
   }
 }

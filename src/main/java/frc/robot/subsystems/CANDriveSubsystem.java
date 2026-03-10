@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +20,10 @@ import com.ctre.phoenix.motorcontrol.can.*;
 // import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 
 public class CANDriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX leftLeader;
@@ -32,6 +36,11 @@ public class CANDriveSubsystem extends SubsystemBase {
   private final PhotonCamera camera = new PhotonCamera("photonvision"); // Must match your camera name in the dashboard
   private final PIDController turnPID = new PIDController(0.15, 0, 0.005); // Tune these constants
   private final PIDController distancePID = new PIDController(0.05, 0, 0.005); // Tune these constants
+
+  double rotationSpeed = 0;
+  double yaw = 2;
+  double range = 0;
+  double distrange = 0;
 
 
   public CANDriveSubsystem() {
@@ -67,10 +76,32 @@ public class CANDriveSubsystem extends SubsystemBase {
     leftLeader.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
     leftFollower.setNeutralMode(NeutralMode.Brake);
+
+    SmartDashboard.putNumber("Range", 0);
+    SmartDashboard.putNumber("Angle", 0);
+    turnPID.setTolerance(1.0);
+    distancePID.setTolerance(.1);
+
+
   }
 
   @Override
   public void periodic() {
+    var distresult = camera.getLatestResult();
+
+    if (distresult.hasTargets()) {
+      yaw = distresult.getBestTarget().getYaw();
+      yaw = Math.round(yaw *100.0)/100.0;
+      double targetPitch = distresult.getBestTarget().getPitch(); 
+      distrange = PhotonUtils.calculateDistanceToTargetMeters(
+        CAMERA_HEIGHT_METERS,
+        TARGET_HEIGHT_METERS,
+        CAMERA_PITCH_RADIANS,
+        Units.degreesToRadians(targetPitch));
+      distrange = Math.round(distrange * 100.0)/100.0;
+      SmartDashboard.putNumber("Range", distrange);
+      SmartDashboard.putNumber("Angle", yaw);
+    }
   }
 
   // Command factory to create command to drive the robot with joystick inputs.
@@ -85,19 +116,12 @@ public class CANDriveSubsystem extends SubsystemBase {
         var result = camera.getLatestResult();
 
         if (result.hasTargets()) {
-            double yaw = result.getBestTarget().getYaw();
-            double rotationSpeed = turnPID.calculate(yaw, 0);
-            //rotationSpeed = Math.max(-0.3,Math.min(0.3,rotationSpeed));
 
-            double distance = result.getBestTarget().getBestCameraToTarget().getX();
-            double speed = distancePID.calculate(distance,2);
-            speed = Math.max(-0.3,Math.min(0.3,speed));
-
-            // Calculate rotation speed. Goal is 0 degrees yaw (centered).
-            // Negative yaw means tag is left, so we need to rotate left (negative rotation).
-
-            // Apply to tank drive (forward/backward speed = 0, only rotation)
-            drive.arcadeDrive(-speed, rotationSpeed*.3);
+            if (!turnPID.atSetpoint()) {
+              rotationSpeed = turnPID.calculate(yaw, 0);
+              rotationSpeed = Math.max(-0.3,Math.min(0.3,rotationSpeed));
+              drive.arcadeDrive(0, rotationSpeed * .3);
+            }
         } else {
             // No target found; stop or search
             drive.stopMotor();

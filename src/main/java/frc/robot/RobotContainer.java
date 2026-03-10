@@ -16,6 +16,8 @@ import static frc.robot.Constants.FuelConstants.*;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANFuelSubsystem;
+import frc.robot.subsystems.CANFeederSubsystem;
+import frc.robot.subsystems.CANClimberSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,13 +30,15 @@ public class RobotContainer {
   // The robot's subsystems
   private final CANDriveSubsystem driveSubsystem = new CANDriveSubsystem();
   private final CANFuelSubsystem ballSubsystem = new CANFuelSubsystem();
+  private final CANFeederSubsystem feederSubsystem = new CANFeederSubsystem();
+  private final CANClimberSubsystem climberSubsystem = new CANClimberSubsystem();
   
   // The driver's controller
   private final CommandXboxController driverController = new CommandXboxController(DRIVER_CONTROLLER_PORT);
 
   // The operator's controller
-  //private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
-  private final CommandGenericHID boxController = new CommandGenericHID(BOX_CONTROLLER_PORT);
+  private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
+  //private final CommandGenericHID boxController = new CommandGenericHID(BOX_CONTROLLER_PORT);
 
   // The autonomous chooser
   private final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -67,43 +71,29 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    // While the left bumper on operator controller is held, intake Fuel
     //operatorController.leftBumper()
     //    .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
-    driverController.leftBumper()
-        .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
-    //boxController.button(9)
-    //    .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
-    // While the right bumper on the operator controller is held, spin up for 1
-    // second, then launch fuel. When the button is released, stop.
-    //operatorController.rightBumper()
-    //    .whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS)
-    //        .andThen(ballSubsystem.launchCommand())
-    //        .finallyDo(() -> ballSubsystem.stop()));
-    driverController.rightBumper()
-        .whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS)
-            .andThen(ballSubsystem.launchCommand())
-            .finallyDo(() -> ballSubsystem.stop()));
-    //boxController.button(10)
-    //    .whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS)
-    //        .andThen(ballSubsystem.launchCommand())
-    //        .finallyDo(() -> ballSubsystem.stop()));
-    // While the A button is held on the operator controller, eject fuel back out
-    // the intake
-    //operatorController.a()
-    //    .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
-    driverController.a()
-        .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
-    //boxController.button(11)
-    //    .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
+    //driverController.leftBumper().whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
 
-    boxController.button(1).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
-    boxController.button(2).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
-    boxController.button(3).whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS).andThen(ballSubsystem.launchCommand()).finallyDo(() -> ballSubsystem.stop()));
-    boxController.button(4).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.setVelocity(SmartDashboard.getNumber("Target RPM", SPIN_RPMS)), () -> ballSubsystem.stop()));
-//    boxController.button(4).whileTrue(ballSubsystem.setVelocityCommand(SPIN_RPMS));
+    //driverController.rightBumper().whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS).andThen(ballSubsystem.launchCommand()).finallyDo(() -> ballSubsystem.stop()));
 
-    driverController.y().whileTrue(driveSubsystem.alignWithTag());
+    driverController.y().whileTrue(climberSubsystem.runEnd(() -> climberSubsystem.climberup(), () -> climberSubsystem.stop()));
+    driverController.a().whileTrue(climberSubsystem.runEnd(() -> climberSubsystem.climberdown(), () -> climberSubsystem.stop()));
+
+    //boxController.button(1).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
+    //boxController.button(2).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
+    //boxController.button(3).whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS).andThen(ballSubsystem.launchCommand()).finallyDo(() -> ballSubsystem.stop()));
+    //boxController.button(4).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.setVelocity(SmartDashboard.getNumber("Target RPM", SPIN_RPMS)), () -> ballSubsystem.stop()));
+    //boxController.button(5).whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.feed(), () -> ballSubsystem.stop()));
+
+    operatorController.leftBumper().whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
+    operatorController.rightBumper().whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
+    operatorController.a().whileTrue(ballSubsystem.spinUpCommand().withTimeout(SPIN_UP_SECONDS).andThen(ballSubsystem.launchCommand()).finallyDo(() -> ballSubsystem.stop()));
+    operatorController.y().whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.launchVelocity(SmartDashboard.getNumber("Target RPM", SPIN_RPMS)), () -> ballSubsystem.stop()));
+    operatorController.b().whileTrue(feederSubsystem.runEnd(() -> feederSubsystem.feedout(), () -> feederSubsystem.stop()));
+    operatorController.x().whileTrue(feederSubsystem.runEnd(() -> feederSubsystem.feedin(), () -> feederSubsystem.stop()));
+
+    driverController.b().whileTrue(driveSubsystem.alignWithTag());
 
     // Set the default command for the drive subsystem to the command provided by
     // factory with the values provided by the joystick axes on the driver
