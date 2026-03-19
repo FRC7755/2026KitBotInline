@@ -9,6 +9,8 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import com.ctre.phoenix6.SignalLogger;
 import com.revrobotics.util.StatusLogger;
 //import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 
@@ -38,6 +40,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     StatusLogger.disableAutoLogging();
+    SignalLogger.enableAutoLogging(false);
 
     // Used to track usage of Kitbot code, please do not remove.
     HAL.report(tResourceType.kResourceType_Framework, 10);

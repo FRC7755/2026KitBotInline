@@ -37,11 +37,13 @@ public final class Constants {
   public static final class FuelConstants {
     // Motor controller IDs for Fuel Mechanism motors
     public static final int FEEDER_MOTOR_ID = 6;
-    public static final int INTAKE_LAUNCHER_MOTOR_ID = 5;
+    public static final int LAUNCHER_MOTOR_ID = 5;
+    public static final int INTAKE_MOTOR_ID = 8;
 
     // Current limit and nominal voltage for fuel mechanism motors.
     public static final int FEEDER_MOTOR_CURRENT_LIMIT = 60;
     public static final int LAUNCHER_MOTOR_CURRENT_LIMIT = 60;
+    public static final int INTAKE_MOTOR_CURRENT_LIMIT = 60;
 
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
@@ -53,7 +55,10 @@ public final class Constants {
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = .5;
 
-    public static final double SPIN_RPMS = 3000;
+    public static final double INTAKE_RPMS = 200;
+    public static final double FEEDER_RPMS = 1000;
+    public static final double LAUNCHER_RPMS = 4000;
+    public static final double LAUNCHER_SLOW_RPMS = -500;
     public static final double RPM_TOLERANCE = 50;
   }
 
@@ -62,7 +67,7 @@ public final class Constants {
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
-    public static final int BOX_CONTROLLER_PORT = 2;
+    public static final int BOX_CONTROLLER_PORT = 1;
     
 
     // This value is multiplied by the joystick value when driving the robot to
@@ -73,7 +78,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     public static final int CLIMBER_MOTOR_ID = 7;
-    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 60;
-    public static final double CLIMBER_VOLTAGE = 8;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 45;
+    public static final double CLIMBER_VOLTAGE = 3;
   }
 }
