@@ -168,7 +168,7 @@ public class RobotContainer {
       )
     );
 
-    // Intake In Only
+    // Intake In Only - Test Row
     boxController.button(6).whileTrue(
       Commands.sequence(
         Commands.parallel(
@@ -180,7 +180,7 @@ public class RobotContainer {
       )
     );
 
-    // Intake Out Only
+    // Intake Out Only - Test Row
     boxController.button(7).whileTrue(
       Commands.sequence(
         Commands.parallel(
@@ -192,7 +192,7 @@ public class RobotContainer {
       )
     );
 
-    // Launcher In Only
+    // Launcher In Only - Test Row
     boxController.button(8).whileTrue(
       Commands.sequence(
         Commands.parallel(
@@ -204,7 +204,7 @@ public class RobotContainer {
       )
     );
 
-    // Launcher Out Only
+    // Launcher Out Only - Test Row
     boxController.button(9).whileTrue(
       Commands.sequence(
         Commands.parallel(
@@ -216,26 +216,26 @@ public class RobotContainer {
       )
     );
 
-    // Launcher Low Speed In Only
+    // Feeder In Only
     boxController.button(10).whileTrue(
       Commands.sequence(
         Commands.parallel(
-            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Slow Target RPM", LAUNCHER_SLOW_RPMS) * -1)
+            feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS))
         )
         .finallyDo((interrupted) -> {
-          launcherSubsystem.launcherStop();
+          feederSubsystem.feederStop();
         })
       )
     );
 
-    // Launcher Low Speed Out Only
+    // Feeder Out Only
     boxController.button(11).whileTrue(
       Commands.sequence(
         Commands.parallel(
-            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Slow Target RPM", LAUNCHER_SLOW_RPMS))
+            feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1)
         )
         .finallyDo((interrupted) -> {
-          launcherSubsystem.launcherStop();
+          feederSubsystem.feederStop();
         })
       )
     );

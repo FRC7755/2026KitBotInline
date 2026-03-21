@@ -36,7 +36,7 @@ public final class Autos {
         Commands.parallel(
           launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS)).withTimeout(9),
           intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS)).withTimeout(9),
-          feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS)).withTimeout(9)
+          feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1).withTimeout(9)
         ).finallyDo((interrupted) -> {
           intakeSubsystem.intakeStop();
           feederSubsystem.feederStop();
