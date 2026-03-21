@@ -40,7 +40,7 @@ public class RobotContainer {
   private final CommandXboxController driverController = new CommandXboxController(DRIVER_CONTROLLER_PORT);
 
   // The operator's controller
-  private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
+  //private final CommandXboxController operatorController = new CommandXboxController(OPERATOR_CONTROLLER_PORT);
   private final CommandGenericHID boxController = new CommandGenericHID(BOX_CONTROLLER_PORT);
 
   // The autonomous chooser
@@ -58,7 +58,7 @@ public class RobotContainer {
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
-    autoChooser.setDefaultOption("Autonomous", Autos.exampleAuto(driveSubsystem, launcherSubsystem));
+    autoChooser.setDefaultOption("Autonomous", Autos.exampleAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
   }
 
   /**
@@ -93,9 +93,9 @@ public class RobotContainer {
     //operatorController.rightBumper().whileTrue(launcherSubsystem.runEnd(() -> launcherSubsystem.eject(), () -> launcherSubsystem.stop()));
     //operatorController.b().whileTrue(feederSubsystem.runEnd(() -> feederSubsystem.feedout(), () -> feederSubsystem.stop()));
     //operatorController.x().whileTrue(feederSubsystem.runEnd(() -> feederSubsystem.feedin(), () -> feederSubsystem.stop()));
-    operatorController.y().whileTrue(launcherSubsystem.runEnd(() -> 
-          launcherSubsystem.launcherRun(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS)),
-          () -> launcherSubsystem.launcherStop()));
+    //operatorController.y().whileTrue(launcherSubsystem.runEnd(() -> 
+    //      launcherSubsystem.launcherRun(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS)),
+    //      () -> launcherSubsystem.launcherStop()));
 
 
     // Intake
@@ -135,35 +135,17 @@ public class RobotContainer {
       Commands.sequence(
         Commands.parallel(
             intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS)),
-            feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1),
             launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS))
         )
         .finallyDo((interrupted) -> {
           intakeSubsystem.intakeStop();
-          feederSubsystem.feederStop();
-          launcherSubsystem.launcherStop();
-        })
-      )
-    );
-
-    // Feeder Agitate, Keep Launcher spinning
-    boxController.button(4).whileTrue(
-      Commands.sequence(
-        Commands.parallel(
-            intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS)),
-            feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS)),
-            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS))
-        )
-        .finallyDo((interrupted) -> {
-          intakeSubsystem.intakeStop();
-          feederSubsystem.feederStop();
           launcherSubsystem.launcherStop();
         })
       )
     );
 
     // Feeder In Only
-    boxController.button(5).whileTrue(
+    boxController.button(4).whileTrue(
       Commands.sequence(
         Commands.parallel(
             feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS))
@@ -175,7 +157,7 @@ public class RobotContainer {
     );
 
     // Feeder Out Only
-    boxController.button(6).whileTrue(
+    boxController.button(5).whileTrue(
       Commands.sequence(
         Commands.parallel(
             feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1)
@@ -187,7 +169,7 @@ public class RobotContainer {
     );
 
     // Intake In Only
-    boxController.button(7).whileTrue(
+    boxController.button(6).whileTrue(
       Commands.sequence(
         Commands.parallel(
             intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS))
@@ -199,7 +181,7 @@ public class RobotContainer {
     );
 
     // Intake Out Only
-    boxController.button(8).whileTrue(
+    boxController.button(7).whileTrue(
       Commands.sequence(
         Commands.parallel(
             intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS) * -1)
@@ -211,6 +193,18 @@ public class RobotContainer {
     );
 
     // Launcher In Only
+    boxController.button(8).whileTrue(
+      Commands.sequence(
+        Commands.parallel(
+            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS) * -1)
+        )
+        .finallyDo((interrupted) -> {
+          launcherSubsystem.launcherStop();
+        })
+      )
+    );
+
+    // Launcher Out Only
     boxController.button(9).whileTrue(
       Commands.sequence(
         Commands.parallel(
@@ -222,11 +216,23 @@ public class RobotContainer {
       )
     );
 
-    // Launcher Out Only
+    // Launcher Low Speed In Only
     boxController.button(10).whileTrue(
       Commands.sequence(
         Commands.parallel(
-            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS) * -1)
+            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Slow Target RPM", LAUNCHER_SLOW_RPMS) * -1)
+        )
+        .finallyDo((interrupted) -> {
+          launcherSubsystem.launcherStop();
+        })
+      )
+    );
+
+    // Launcher Low Speed Out Only
+    boxController.button(11).whileTrue(
+      Commands.sequence(
+        Commands.parallel(
+            launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Slow Target RPM", LAUNCHER_SLOW_RPMS))
         )
         .finallyDo((interrupted) -> {
           launcherSubsystem.launcherStop();
