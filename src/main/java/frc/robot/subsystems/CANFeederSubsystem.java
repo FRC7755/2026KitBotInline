@@ -38,7 +38,7 @@ public class CANFeederSubsystem extends SubsystemBase {
 //    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE);
 //    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE);
 //    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Feeder Target RPM", LAUNCHER_RPMS);
+    SmartDashboard.putNumber("Feeder Target RPM", FEEDER_RPMS);
     SmartDashboard.putNumber("Feeder Current RPM", 0);
     SmartDashboard.putBoolean("Feeder RPM Achieved", false);
     SmartDashboard.putBoolean("Feeder Button", false);
@@ -46,7 +46,7 @@ public class CANFeederSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Feeder Motor I", 0.0);
     SmartDashboard.putNumber("Feeder Motor D", 0.0);
 
-    feederConfig.inverted(true);
+    feederConfig.inverted(false);
     feederConfig.idleMode(IdleMode.kBrake);
     feederConfig.smartCurrentLimit(FEEDER_MOTOR_CURRENT_LIMIT);
     feederConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pid(0.0001, 0.0, 0.0).velocityFF(0.00215);
@@ -55,17 +55,27 @@ public class CANFeederSubsystem extends SubsystemBase {
     feederRoller.configure(feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void feederRun(double feederRpm){
-    feederPID.setSetpoint(feederRpm,ControlType.kVelocity);
-    SmartDashboard.putBoolean("Intake Button", true);
+  public void feederRunIn(){
+    feederPID.setSetpoint(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS),ControlType.kVelocity);
+    SmartDashboard.putBoolean("Feeder Button", true);
   }
 
-  public Command feederRunCommand(double targetrpm) {
-    return this.run(() -> feederRun(targetrpm));
+  public Command feederRunInCommand() {
+    return this.run(() -> feederRunIn());
+  }
+
+  public void feederRunOut(){
+    feederPID.setSetpoint(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1,ControlType.kVelocity);
+    SmartDashboard.putBoolean("Feeder Button", true);
+  }
+
+  public Command feederRunOutCommand() {
+    return this.run(() -> feederRunOut());
   }
 
   public void feederStop() {
     feederRoller.set(0);
+    SmartDashboard.putBoolean("Feeder Button", false);
   }
 
   @Override

@@ -38,7 +38,7 @@ public class CANIntakeSubsystem extends SubsystemBase {
 //    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE);
 //    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE);
 //    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Intake Target RPM", LAUNCHER_RPMS);
+    SmartDashboard.putNumber("Intake Target RPM", INTAKE_RPMS);
     SmartDashboard.putNumber("Intake Current RPM", 0);
     SmartDashboard.putBoolean("Intake RPM Achieved", false);
     SmartDashboard.putBoolean("Intake Button", false);
@@ -55,18 +55,27 @@ public class CANIntakeSubsystem extends SubsystemBase {
     intakeRoller.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
-  public void intakeRun(double intakeRpm){
-    intakePID.setSetpoint(intakeRpm,ControlType.kVelocity);
+  public void intakeRunIn(){
+    intakePID.setSetpoint(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS),ControlType.kVelocity);
     SmartDashboard.putBoolean("Intake Button", true);
   }
 
-  public Command intakeRunCommand(double targetrpm) {
-    return this.run(() -> intakeRun(targetrpm));
+  public Command intakeRunInCommand() {
+    return this.run(() -> intakeRunIn());
   }
 
+  public void intakeRunOut(){
+    intakePID.setSetpoint(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS) * -1,ControlType.kVelocity);
+    SmartDashboard.putBoolean("Intake Button", true);
+  }
+
+  public Command intakeRunOutCommand() {
+    return this.run(() -> intakeRunOut());
+  }
 
   public void intakeStop() {
     intakeRoller.set(0);
+    SmartDashboard.putBoolean("Intake Button", false);
   }
 
   @Override

@@ -55,19 +55,20 @@ public final class Constants {
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = .5;
 
-    public static final double INTAKE_RPMS = 200;
-    public static final double FEEDER_RPMS = 1000;
-    public static final double LAUNCHER_RPMS = 4000;
+    public static final double INTAKE_RPMS =3000;
+    public static final double FEEDER_RPMS = 3000;
+    public static final double LAUNCHER_RPMS = 3200;
     public static final double LAUNCHER_SLOW_RPMS = -500;
     public static final double RPM_TOLERANCE = 50;
+    public static final double KNOB_ZERO = 0;
   }
 
   public static final class OperatorConstants {
     // Port constants for driver and operator controllers. These should match the
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
-    public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final int BOX_CONTROLLER_PORT = 1;
+    public static final int KNOB_CONTROLLER_PORT = 2;
     
 
     // This value is multiplied by the joystick value when driving the robot to

@@ -25,18 +25,18 @@ public final class Autos {
         // Drive backwards for .25 seconds. The driveArcadeAuto command factory
         // creates a command which does not end which allows us to control
         // the timing using the withTimeout decorator
-        driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(1),
+        driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(2),
         // Stop driving. This line uses the regular driveArcade command factory so it
         // ends immediately after commanding the motors to stop
         driveSubsystem.driveArcade(() -> 0, () -> 0),
         // Spin up the launcher for 1 second and then launch balls for 9 seconds, for a
         // total of 10 seconds
-        launcherSubsystem.launcherRunCommand(LAUNCHER_RPMS).withTimeout(1),
+        launcherSubsystem.launcherRunOutCommand().withTimeout(1),
         //ParallelCommandGroup(
         Commands.parallel(
-          launcherSubsystem.launcherRunCommand(SmartDashboard.getNumber("Launcher Target RPM", LAUNCHER_RPMS)).withTimeout(9),
-          intakeSubsystem.intakeRunCommand(SmartDashboard.getNumber("Intake Target RPM", INTAKE_RPMS)).withTimeout(9),
-          feederSubsystem.feederRunCommand(SmartDashboard.getNumber("Feeder Target RPM", FEEDER_RPMS) * -1).withTimeout(9)
+          launcherSubsystem.launcherRunOutCommand().withTimeout(9),
+          intakeSubsystem.intakeRunInCommand().withTimeout(9),
+          feederSubsystem.feederRunOutCommand().withTimeout(9)
         ).finallyDo((interrupted) -> {
           intakeSubsystem.intakeStop();
           feederSubsystem.feederStop();
