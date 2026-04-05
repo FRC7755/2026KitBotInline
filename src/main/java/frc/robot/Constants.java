@@ -55,10 +55,10 @@ public final class Constants {
     public static final double SPIN_UP_FEEDER_VOLTAGE = -6;
     public static final double SPIN_UP_SECONDS = .5;
 
-    public static final double INTAKE_RPMS =3000;
-    public static final double FEEDER_RPMS = 3000;
+    public static final double INTAKE_RPMS =3500;
+    public static final double FEEDER_RPMS = 3500;
     public static final double LAUNCHER_RPMS = 3200;
-    public static final double LAUNCHER_SLOW_RPMS = -500;
+    public static final double LAUNCHER_SLOW_RPMS = -600;
     public static final double RPM_TOLERANCE = 50;
     public static final double KNOB_ZERO = 0;
   }

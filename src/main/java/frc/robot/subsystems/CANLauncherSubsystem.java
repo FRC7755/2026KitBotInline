@@ -103,8 +103,9 @@ public class CANLauncherSubsystem extends SubsystemBase {
     }
     launcherRPM = Math.round(launcherRPM *1.0)/1.0;
     knobReading = (knobReading +1) / 2;
-    double launcherTargetRPM = knobReading * 5800;
-    
+    double launcherTargetRPM = knobReading * 6000;
+    launcherTargetRPM = Math.round(launcherTargetRPM * 1.0)/1.0;
+
     SmartDashboard.putNumber("Launcher Target RPM", launcherTargetRPM);
     SmartDashboard.putNumber("Knob", knobReading);
     SmartDashboard.putNumber("Launcher Current RPM", launcherRPM);
