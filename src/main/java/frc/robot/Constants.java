@@ -82,4 +82,16 @@ public final class Constants {
     public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 45;
     public static final double CLIMBER_VOLTAGE = 3;
   }
+
+  public static final class AutoConstants {
+    public static final double INITIAL_DELAY = 0;
+    public static final double BACKUP_TIME = 2;
+    public static final double BACKUP_SPEED = 0.5;
+    public static final double RETURN_DELAY = 1;
+    public static final double SHOOTER_TIME = 5;
+    public static final double FORWARD_TIME = 2;
+    public static final double FORWARD_SPEED = -0.5;
+    public static final boolean RETURN_TO_START = true;
+
+  }
 }

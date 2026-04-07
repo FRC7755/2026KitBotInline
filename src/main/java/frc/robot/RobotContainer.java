@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 
 import static frc.robot.Constants.OperatorConstants.*;
-//import static frc.robot.Constants.FuelConstants.*;
+import static frc.robot.Constants.AutoConstants.*;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.CANDriveSubsystem;
 import frc.robot.subsystems.CANLauncherSubsystem;
@@ -54,12 +54,22 @@ public class RobotContainer {
     SmartDashboard.putNumber("Drive scaling value", DRIVE_SCALING);
     SmartDashboard.putNumber("Rotation scaling value", ROTATION_SCALING);
 
+    SmartDashboard.putNumber("Auto Delay", INITIAL_DELAY);
+    SmartDashboard.putNumber("Backup Time", BACKUP_TIME);
+    SmartDashboard.putNumber("Backup Speed", BACKUP_SPEED);
+    SmartDashboard.putNumber("Return Delay", RETURN_DELAY);
+    SmartDashboard.putNumber("Shooter Time", SHOOTER_TIME);
+    SmartDashboard.putNumber("Forward Time", FORWARD_TIME);
+    SmartDashboard.putNumber("Forward Speed", FORWARD_SPEED);
+    SmartDashboard.putBoolean("Return to Start", RETURN_TO_START);
+
+
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
-    autoChooser.setDefaultOption("Example Auto", Autos.exampleAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
-    autoChooser.addOption("New Auto", Autos.newAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    autoChooser.setDefaultOption("Main Auto", Autos.mainAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
+    autoChooser.addOption("Delay 2 Sec", Autos.Delay2SecAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
+    SmartDashboard.putData("Auto Selection", autoChooser);
   }
 
   /**
