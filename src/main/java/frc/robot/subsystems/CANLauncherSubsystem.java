@@ -40,7 +40,7 @@ public class CANLauncherSubsystem extends SubsystemBase {
     // with your new values. For more information, see the Software Guide.
 //    SmartDashboard.putNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE);
 //    SmartDashboard.putNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE);
-    SmartDashboard.putNumber("Knob", KNOB_ZERO);
+    SmartDashboard.putString("Knob", "0%");
     SmartDashboard.putNumber("Launcher Target RPM", LAUNCHER_RPMS);
     SmartDashboard.putNumber("Launcher Slow Target RPM", LAUNCHER_SLOW_RPMS);
     SmartDashboard.putNumber("Launcher Current RPM", 0);
@@ -101,13 +101,14 @@ public class CANLauncherSubsystem extends SubsystemBase {
     } else {
       SmartDashboard.putBoolean("Launcher RPM Achieved", false);
     }
-    launcherRPM = Math.round(launcherRPM *1.0)/1.0;
+    launcherRPM = Math.round(launcherRPM * 1.0)/1.0;
     knobReading = (knobReading +1) / 2;
     double launcherTargetRPM = knobReading * 6000;
     launcherTargetRPM = Math.round(launcherTargetRPM * 1.0)/1.0;
+    knobReading = Math.round(knobReading * 100.0)/100.0;
 
     SmartDashboard.putNumber("Launcher Target RPM", launcherTargetRPM);
-    SmartDashboard.putNumber("Knob", knobReading);
+    SmartDashboard.putString("Knob", (knobReading * 100) + "%");
     SmartDashboard.putNumber("Launcher Current RPM", launcherRPM);
     SmartDashboard.putNumber("Launcher Motor P", launcherRoller.configAccessor.closedLoop.getP());
     SmartDashboard.putNumber("Launcher Motor I", launcherRoller.configAccessor.closedLoop.getI());

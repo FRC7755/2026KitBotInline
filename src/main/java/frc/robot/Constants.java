@@ -88,6 +88,7 @@ public final class Constants {
     public static final double BACKUP_TIME = 2;
     public static final double BACKUP_SPEED = 0.5;
     public static final double RETURN_DELAY = 1;
+    public static final double SHOOTER_DELAY = 2;
     public static final double SHOOTER_TIME = 5;
     public static final double FORWARD_TIME = 2;
     public static final double FORWARD_SPEED = -0.5;

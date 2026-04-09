@@ -33,9 +33,9 @@ public class CANDriveSubsystem extends SubsystemBase {
 
   private final DifferentialDrive drive;
 
-  private final PhotonCamera camera = new PhotonCamera("photonvision"); // Must match your camera name in the dashboard
-  private final PIDController turnPID = new PIDController(0.15, 0, 0.005); // Tune these constants
-  private final PIDController distancePID = new PIDController(0.05, 0, 0.005); // Tune these constants
+//  private final PhotonCamera camera = new PhotonCamera("photonvision"); // Must match your camera name in the dashboard
+//  private final PIDController turnPID = new PIDController(0.15, 0, 0.005); // Tune these constants
+//  private final PIDController distancePID = new PIDController(0.05, 0, 0.005); // Tune these constants
 
   double rotationSpeed = 0;
   double yaw = 2;
@@ -77,19 +77,19 @@ public class CANDriveSubsystem extends SubsystemBase {
     rightFollower.setNeutralMode(NeutralMode.Brake);
     leftFollower.setNeutralMode(NeutralMode.Brake);
 
-    SmartDashboard.putNumber("Range", 0);
-    SmartDashboard.putNumber("Angle", 0);
-    turnPID.setTolerance(1.0);
-    distancePID.setTolerance(.1);
+//    SmartDashboard.putNumber("Range", 0);
+//    SmartDashboard.putNumber("Angle", 0);
+//    turnPID.setTolerance(1.0);
+//    distancePID.setTolerance(.1);
 
 
   }
 
   @Override
   public void periodic() {
-    var distresult = camera.getLatestResult();
+//    var distresult = camera.getLatestResult();
 
-    if (distresult.hasTargets()) {
+/*    if (distresult.hasTargets()) {
       yaw = distresult.getBestTarget().getYaw();
       yaw = Math.round(yaw *100.0)/100.0;
       double targetPitch = distresult.getBestTarget().getPitch(); 
@@ -101,7 +101,7 @@ public class CANDriveSubsystem extends SubsystemBase {
       distrange = Math.round(distrange * 100.0)/100.0;
       SmartDashboard.putNumber("Range", distrange);
       SmartDashboard.putNumber("Angle", yaw);
-    }
+    } */
   }
 
   // Command factory to create command to drive the robot with joystick inputs.
@@ -110,7 +110,7 @@ public class CANDriveSubsystem extends SubsystemBase {
         () -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
   }
 
-  public Command alignWithTag() {
+/*  public Command alignWithTag() {
     return this.run(
       ()-> {
         var result = camera.getLatestResult();
@@ -129,5 +129,5 @@ public class CANDriveSubsystem extends SubsystemBase {
 
       }
     );
-    }
+    } */
 }

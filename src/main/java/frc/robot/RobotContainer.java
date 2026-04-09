@@ -30,6 +30,10 @@ import frc.robot.subsystems.CANIntakeSubsystem;
  * commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // The autonomous chooser
+//  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private final SendableChooser<String> autoChooser = new SendableChooser<>();
+
   // The robot's subsystems
   private final CANDriveSubsystem driveSubsystem = new CANDriveSubsystem();
   private final CANLauncherSubsystem launcherSubsystem = new CANLauncherSubsystem();
@@ -42,8 +46,6 @@ public class RobotContainer {
   // The operator's controller box
   private final CommandGenericHID boxController = new CommandGenericHID(BOX_CONTROLLER_PORT);
 
-  // The autonomous chooser
-  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,6 +60,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Backup Time", BACKUP_TIME);
     SmartDashboard.putNumber("Backup Speed", BACKUP_SPEED);
     SmartDashboard.putNumber("Return Delay", RETURN_DELAY);
+    SmartDashboard.putNumber("Shooter Delay", SHOOTER_DELAY);
     SmartDashboard.putNumber("Shooter Time", SHOOTER_TIME);
     SmartDashboard.putNumber("Forward Time", FORWARD_TIME);
     SmartDashboard.putNumber("Forward Speed", FORWARD_SPEED);
@@ -67,9 +70,15 @@ public class RobotContainer {
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
-    autoChooser.setDefaultOption("Main Auto", Autos.mainAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
+/*    autoChooser.setDefaultOption("Main Auto", Autos.mainAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
     autoChooser.addOption("Delay 2 Sec", Autos.Delay2SecAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
+    autoChooser.addOption("Delay 4 Sec", Autos.Delay4SecAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem));
     SmartDashboard.putData("Auto Selection", autoChooser);
+*/
+  autoChooser.setDefaultOption("Main", "MAIN");
+  autoChooser.addOption("Delay 2", "DELAY2");
+  autoChooser.addOption("Delay 4", "DELAY4");
+  SmartDashboard.putData("Auto Selection", autoChooser);
   }
 
   /**
@@ -273,8 +282,16 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+/*  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return autoChooser.getSelected();
-  }
+  } */
+  public Command getAutonomousCommand() {
+  // Map the string to the command only when auto starts
+  return switch (autoChooser.getSelected()) {
+    case "DELAY2" -> Autos.Delay2SecAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem);
+    case "DELAY4" -> Autos.Delay4SecAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem);
+    default -> Autos.mainAuto(driveSubsystem, launcherSubsystem, feederSubsystem, intakeSubsystem);
+  };
+}
 }
