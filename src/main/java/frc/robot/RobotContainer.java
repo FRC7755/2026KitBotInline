@@ -55,6 +55,8 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Drive scaling value", DRIVE_SCALING);
     SmartDashboard.putNumber("Rotation scaling value", ROTATION_SCALING);
+    SmartDashboard.putNumber("Left scaling value", LEFT_SCALING);
+    SmartDashboard.putNumber("Right scaling value", RIGHT_SCALING);
 
     SmartDashboard.putNumber("Auto Delay", INITIAL_DELAY);
     SmartDashboard.putNumber("Backup Time", BACKUP_TIME);
@@ -275,6 +277,10 @@ public class RobotContainer {
         driveSubsystem.driveArcade(
             () -> -driverController.getLeftY() * SmartDashboard.getNumber("Drive scaling value", DRIVE_SCALING),
             () -> -driverController.getRightX() * SmartDashboard.getNumber("Rotation scaling value", ROTATION_SCALING)));
+
+//            driveSubsystem.driveTank(
+//            () -> -driverController.getLeftY() * SmartDashboard.getNumber("Left scaling value", LEFT_SCALING),
+//            () -> -driverController.getRightY() * SmartDashboard.getNumber("Right scaling value", RIGHT_SCALING)));
   }
 
   /**

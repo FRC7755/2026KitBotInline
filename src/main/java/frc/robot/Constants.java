@@ -74,7 +74,10 @@ public final class Constants {
     // This value is multiplied by the joystick value when driving the robot to
     // help avoid driving and turning too fast and being difficult to control
     public static final double DRIVE_SCALING = 1;
-    public static final double ROTATION_SCALING = 1;
+    public static final double ROTATION_SCALING = 0.93;
+
+    public static final double LEFT_SCALING = 1;
+    public static final double RIGHT_SCALING = 0.93;
   }
 
   public static final class ClimberConstants {

@@ -19,8 +19,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 // import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
+//import org.photonvision.PhotonCamera;
+//import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -108,6 +108,11 @@ public class CANDriveSubsystem extends SubsystemBase {
   public Command driveArcade(DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     return this.run(
         () -> drive.arcadeDrive(xSpeed.getAsDouble(), zRotation.getAsDouble()));
+  }
+
+  public Command driveTank(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
+    return this.run(
+        () -> drive.tankDrive(leftSpeed.getAsDouble(),rightSpeed.getAsDouble()));
   }
 
 /*  public Command alignWithTag() {
